@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { LogoIcon } from "./Icons";
+import { useSite } from "../lib/site";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -11,6 +12,7 @@ const NAV = [
 ];
 
 export default function Header() {
+  const { content } = useSite();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { pathname, search } = useLocation();
@@ -25,8 +27,8 @@ export default function Header() {
   return (
     <header className={`site-header${scrolled ? " scrolled" : ""}${open ? " nav-open" : ""}`}>
       <div className="container nav">
-        <Link to="/" className="logo" aria-label="Curava home">
-          <span className="logo-mark"><LogoIcon /></span>Curava.
+        <Link to="/" className="logo" aria-label={`${content.general.brand_name} home`}>
+          <span className="logo-mark"><LogoIcon /></span>{content.general.brand_name}.
         </Link>
         <ul className="nav-links">
           {NAV.map(n => (

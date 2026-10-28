@@ -1,6 +1,8 @@
 import Button from "../components/Button";
+import { usePageTitle } from "../lib/site";
 
 export default function NotFound() {
+  usePageTitle("Page not found");
   return (
     <section className="section center">
       <div className="container">

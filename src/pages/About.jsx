@@ -1,29 +1,35 @@
 import Button from "../components/Button";
 import InfoCard from "../components/InfoCard";
+import Lines from "../components/Lines";
 import PageHero from "../components/PageHero";
 import Reveal from "../components/Reveal";
-import { images, timeline, values } from "../data";
+import { usePageTitle, useSite } from "../lib/site";
 
 export default function About() {
+  usePageTitle("About");
+  const { content, collections } = useSite();
+  const p = content.about_page;
+  const { company_values: values, milestones } = collections;
+
   return (
     <>
       <PageHero
         crumb="About"
-        title={<>Healthcare that<br />explains itself.</>}
-        banner={{ img: images.aboutBanner, alt: "Curava team celebrating together", value: 4, caption: "Clinics, 60+ clinicians and one shared promise" }}
+        title={p.title}
+        banner={{ img: p.banner_image, value: p.banner_value, suffix: p.banner_suffix, caption: p.banner_caption }}
       >
-        <p className="lead">Curava started with a simple frustration: people were getting tested more than ever, yet understanding less. We set out to close that gap.</p>
+        <p className="lead">{p.intro}</p>
       </PageHero>
 
       <section className="section">
         <div className="container grid-2">
           <Reveal>
-            <span className="eyebrow">Our mission</span>
-            <h2 className="h2" style={{ marginTop: 20 }}>Turn every result into a next step.</h2>
+            <span className="eyebrow">{p.mission_eyebrow}</span>
+            <h2 className="h2" style={{ marginTop: 20 }}><Lines text={p.mission_title} /></h2>
           </Reveal>
           <Reveal>
-            <p className="lead" style={{ maxWidth: "none" }}>We combine modern diagnostics with clinicians who have the time to talk. The goal isn't more data — it's clarity: what's happening in your body, what it means, and what to do about it.</p>
-            <p className="muted" style={{ marginTop: 20 }}>That means smaller patient lists, reports written for humans, and a care team you can actually message. It also means saying no to tests you don't need.</p>
+            <p className="lead" style={{ maxWidth: "none" }}>{p.mission_text}</p>
+            {p.mission_text_2 && <p className="muted" style={{ marginTop: 20 }}>{p.mission_text_2}</p>}
           </Reveal>
         </div>
       </section>
@@ -31,21 +37,21 @@ export default function About() {
       <section className="section section--soft">
         <div className="container">
           <Reveal className="section-head">
-            <h2 className="h2">What we<br />stand for.</h2>
-            <p className="lead">Three principles guide every hire, every program and every conversation.</p>
+            <h2 className="h2"><Lines text={p.values_title} /></h2>
+            <p className="lead">{p.values_text}</p>
           </Reveal>
           <div className="grid-3">
-            {values.map((v, i) => <InfoCard key={v.title} index={i} {...v} />)}
+            {values.map((v, i) => <InfoCard key={v.id} index={i} title={v.title} text={v.text} tone={v.tone !== "default" && v.tone} />)}
           </div>
         </div>
       </section>
 
       <section className="section">
         <div className="container">
-          <Reveal className="section-head"><h2 className="h2">How we got here.</h2></Reveal>
+          <Reveal className="section-head"><h2 className="h2"><Lines text={p.timeline_title} /></h2></Reveal>
           <Reveal className="timeline">
-            {timeline.map(t => (
-              <div className="timeline-row" key={t.year}><strong>{t.year}</strong><h4>{t.title}</h4><p>{t.text}</p></div>
+            {milestones.map(t => (
+              <div className="timeline-row" key={t.id}><strong>{t.year}</strong><h4>{t.title}</h4><p>{t.text}</p></div>
             ))}
           </Reveal>
         </div>
@@ -53,15 +59,11 @@ export default function About() {
 
       <section className="section section--soft" id="careers">
         <div className="container grid-2">
-          <Reveal className="media-rounded"><img src={images.aboutTeam} alt="Doctor talking with a patient" /></Reveal>
+          <Reveal className="media-rounded"><img src={p.careers_image} alt="" /></Reveal>
           <Reveal>
-            <span className="eyebrow">Careers</span>
-            <h2 className="h2" style={{ marginTop: 20 }}>Build the clinic you'd want to visit.</h2>
-            <ul className="check-list">
-              <li>Patient lists capped so you can practise properly.</li>
-              <li>Four-day clinical weeks with protected research time.</li>
-              <li>Equity for every full-time team member.</li>
-            </ul>
+            <span className="eyebrow">{p.careers_eyebrow}</span>
+            <h2 className="h2" style={{ marginTop: 20 }}><Lines text={p.careers_title} /></h2>
+            <ul className="check-list">{(p.careers_points || []).map(t => <li key={t}>{t}</li>)}</ul>
             <Button to="/contact" variant="purple">Get in touch</Button>
           </Reveal>
         </div>
